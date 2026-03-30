@@ -1,0 +1,8 @@
+mkdir -p deployments/nginx/certs
+openssl req -x509 -nodes -days 365 \
+  -newkey rsa:2048 \
+  -keyout deployments/nginx/certs/nginx.key \
+  -out deployments/nginx/certs/nginx.crt
+
+
+  htpasswd -c deployments/nginx/.htpasswd admin

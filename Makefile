@@ -16,3 +16,10 @@ test-api:
      --cacert ./deployments/nginx/certs/nginx.crt;
 
 
+stop-project:
+    docker compose down
+
+
+
+
+
