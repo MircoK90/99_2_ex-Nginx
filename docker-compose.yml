@@ -1,12 +1,54 @@
+version: "3.9"
+
 services:
+  api_v1:
+    build: ./src/api/v1
+    container_name: api-v1
+    restart: always
+    environment:
+      - MODEL_PATH=/model/model.joblib
+    volumes:
+      ./model:/model
+    deploy:
+      replicas: 3
+    networks:
+      - backend
+
+  api_v2:
+    build: ./src/api/v2
+    container_name: api-v2
+    restart: always
+    environment:
+      - MODEL_PATH=/model/model.joblib
+    volumes:
+      ./model:/model
+    networks:
+      - backend
+  
+  nginx:
+    build: ./deployments/nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - api-v1
+      - api-v2
+    networks:
+      - backend
+
+
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus_server
-    ports:
-      - "9090:9090"
     volumes:
       - ./deployments/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - backend
     depends_on:
       - nginx
 
@@ -22,7 +64,13 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - backend
 
 volumes:
   prometheus_data:
   grafana_data:
+
+networks:
+  backend:
+    driver: bridge
