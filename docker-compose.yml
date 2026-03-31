@@ -20,7 +20,7 @@ services:
       - backend
   
   nginx:
-    build: ./deployments/nginx
+    build: ./deployments/nginx                    # When Dockerfile and nginx.conf are in the same directory
     container_name: nginx
     ports:
       - "80:80"
