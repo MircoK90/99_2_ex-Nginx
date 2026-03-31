@@ -1,3 +1,4 @@
+# mk reminder : no empty lines!
 run-project:
 	docker compose up -d --build
 	# run project
