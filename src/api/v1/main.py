@@ -30,7 +30,7 @@ class Sentence(BaseModel):
         "json_schema_extra": {
             "examples": [
                 {
-                    "sentence": "fshf kjsfhsjkd",
+                    "sentence": "This is a surpingly coherent sentence that should be classified as coherent.",
                 }
             ]
         }
