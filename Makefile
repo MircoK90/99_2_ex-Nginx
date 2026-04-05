@@ -11,13 +11,9 @@ test-api:
 		-H "Content-Type: application/json"\
 		-d '{"sentence": "Oh yeah, that was soooo cool!"}'\
 		--user admin:admin\
-		--cacert ./deployments/nginx/certs/nginx.crt;
+		--cacert ./deployments/nginx/certs/nginx.crt;				# trust my own certificate
 
 
 stop-project:
 	docker compose down
-
-
-
-
 

@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  api-v1:
+  api_v1:
     build:
       context: .
       dockerfile: src/api/v1/Dockerfile
@@ -11,7 +11,7 @@ services:
     networks:
       - backend
 
-  api-v2:
+  api_v2:
     build:
       context: .
       dockerfile: src/api/v2/Dockerfile
@@ -23,14 +23,13 @@ services:
     build: ./deployments/nginx                    # When Dockerfile and nginx.conf are in the same directory
     container_name: nginx
     ports:
-      - "80:80"
+      - "80:80" 
       - "443:443"
     depends_on:
-      - api-v1
-      - api-v2
+      - api_v1
+      - api_v2
     networks:
       - backend
-
 
 
   prometheus:
@@ -53,12 +52,30 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_USER=admin            # for first creation. Afterwards its saved in the persisten voluumes
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - prometheus
     networks:
       - backend
+
+# after image starts prometheus will scrape the nginx metrics at http://nginx:9113/stub_status
+
+  nginx_exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx_container_exporter
+    command:
+      - --nginx.scrape-uri=http://nginx/stub_status
+    ports:
+      - '9113:9113'
+    depends_on:
+      - nginx
+    networks:
+      - backend
+
+
+
+# persistent volumes for prometheus and grafana data on dedicated Docker Folders
 
 volumes:
   prometheus_data:

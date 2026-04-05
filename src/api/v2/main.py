@@ -30,7 +30,7 @@ class Sentence(BaseModel):
         "json_schema_extra": {
             "examples": [
                 {
-                    "sentence": "fshf kjsfhsjkd",
+                    "sentence": "Does is make fun? yes it does!",
                 }
             ]
         }
